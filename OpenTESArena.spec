@@ -19,7 +19,6 @@ BuildRequires:  cmake
 BuildRequires:  hicolor-icon-theme
 BuildRequires:  icoutils
 BuildRequires:  pkgconfig
-BuildRequires:  update-desktop-files
 BuildRequires:  pkgconfig(openal)
 BuildRequires:  pkgconfig(sdl2)
 %if %{with music}
