@@ -48,22 +48,23 @@ It is written in C++17 and uses SDL2, WildMIDI for music, and OpenAL Soft for so
 %make_build
 
 %install
+%make_install -C build
 # Install binary
-install -D -m 755 build/TESArena %{buildroot}%{_bindir}/%{name}
-install -m 755 %{SOURCE2} %{buildroot}%{_bindir}/%{name}-downloader
+#install -D -m 755 build/TESArena %{buildroot}%{_bindir}/%{name}
+#install -m 755 %{SOURCE2} %{buildroot}%{_bindir}/%{name}-downloader
 # Install data
-mkdir -p %{buildroot}%{_datadir}/%{name}
-cp -Rav data/* %{buildroot}%{_datadir}/%{name}
+#mkdir -p %{buildroot}%{_datadir}/%{name}
+#cp -Rav data/* %{buildroot}%{_datadir}/%{name}
 # Install system baseconfig
-mkdir -p %{buildroot}%{_sysconfdir}/%{name}
-cp -Rav options/* %{buildroot}%{_sysconfdir}/%{name}
+#mkdir -p %{buildroot}%{_sysconfdir}/%{name}
+#cp -Rav options/* %{buildroot}%{_sysconfdir}/%{name}
 # Fix data path in baseconfig
-sed -i 's|ArenaPath=data|ArenaPath=%{_datadir}/%{name}|' %{buildroot}%{_sysconfdir}/%{name}/options-default.txt
+#sed -i 's|ArenaPath=data|ArenaPath=%{_datadir}/%{name}|' %{buildroot}%{_sysconfdir}/%{name}/options-default.txt
 # Install icons and .desktop file
-for s in 32 48 64 ; do
-    install -m755 -d %{buildroot}%{_datadir}/icons/hicolor/${s}x${s}/apps/
-    icotool -p0 -w ${s} -o %{buildroot}%{_datadir}/icons/hicolor/${s}x${s}/apps/%{name}.png -x icon.ico
-done
+#for s in 32 48 64 ; do
+#    install -m755 -d %{buildroot}%{_datadir}/icons/hicolor/${s}x${s}/apps/
+#    icotool -p0 -w ${s} -o %{buildroot}%{_datadir}/icons/hicolor/${s}x${s}/apps/%{name}.png -x icon.ico
+#done
 
 %post
 echo "
