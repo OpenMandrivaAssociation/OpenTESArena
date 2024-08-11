@@ -7,7 +7,7 @@ License:        MIT
 Group:          Amusements/Games/Action/Arcade
 URL:            https://github.com/afritz1/OpenTESArena
 Source0:        https://codeload.github.com/afritz1/OpenTESArena/tar.gz/refs/tags/opentesarena-%{version}#/%{name}-opentesarena-%{version}.tar.gz
-Source1:        %{name}.desktop
+#Source1:        %{name}.desktop
 Source2:        %{name}-downloader
 # PATCH-FEATURE-SUSE use-timidity.patch -- If build with midi support use timidity provided GUS patches
 #Patch0:         use-timidity-0.14.0.patch
