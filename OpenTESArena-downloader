@@ -1,0 +1,79 @@
+#!/bin/sh
+ZIP_URL="https://cdnstatic.bethsoft.com/elderscrolls.com/assets/files/tes/extras/Arena106Setup.zip"
+DATADIR="/usr/share/OpenTESArena"
+UNZIP=$(which unzip)
+[ $? -ne 0 ] && {
+	UNZIP="$(which 7zr) x"
+	[ $? -ne 0 ] && {
+		echo "Neither unzip nor 7zr found, please install one of them"
+		exit 1
+	}
+}
+UNRAR=$(which unrar)
+[ $? -ne 0 ] && {
+	echo "unrar not found, please install it"
+	exit 1
+}
+
+echo "This script will download and install the original data files from Bethesda."
+echo -n "Continue (y/N)? "
+read -n 1 ans
+[ "x$ans" != "xy" -a "x$ans" != "xY" ] && exit 1
+echo ""
+
+OVERRIDE="false"
+echo "Data will be installed into: $DATADIR"
+if [ -d "$DATADIR/ARENA" ]; then
+	if ls -1qA "$DATADIR/ARENA" | grep -q .; then
+		echo -n "Data already exists, do you want to continue and overide it (y/N)? "
+		read -n 1 ans
+		[ "x$ans" != "xy" -a "x$ans" != "xY" ] && exit 1
+		OVERRIDE="true"
+		echo ""
+	fi
+fi
+
+# If something goes wrong die
+set -e
+
+dir=$(mktemp -dq)
+pushd "$dir" > /dev/null
+echo -n "Downloading the data files... "
+wget "$ZIP_URL" > /dev/null 2>&1
+echo "ok"
+
+echo -n "Extracting zip..."
+$UNZIP Arena106Setup.zip > /dev/null
+echo "ok"
+echo -n "Extracting data from exe..."
+$UNRAR x *.exe > /dev/null
+echo "ok"
+
+set +e
+echo -n "Please read the license (press any key)"
+read -n 1 ans
+echo""
+pdftotext -l 1 *.pdf - | less || xdg-open *.pdf
+set -e
+echo -n "Do you accept the license (y/N)? "
+read -n 1 ans
+[ "x$ans" != "xy" -a "x$ans" != "xY" ] && {
+	popd
+	rm -r "$dir"
+	exit 1
+}
+echo ""
+
+echo "Installing data files needs root"
+set -x
+$OVERRIDE && sudo rm -r "$DATADIR/ARENA"
+sudo mkdir -p "$DATADIR"
+sudo mv ./ARENA "$DATADIR"
+set +x
+popd > /dev/null
+
+rm -rf "$dir"
+set +e
+
+echo "DONE! You can now start OpenTESArena.
+Have fun!"
